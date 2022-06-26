@@ -1,26 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classes from "./Player.module.css";
 import dummy from "../../assets/images/dummy.png";
-import { LinearProgress } from "@mui/material";
+import { Slider, IconButton } from "@mui/material";
+import menuIcon from "../../assets/images/menuIcon.svg";
+import volumeIcon from "../../assets/images/volumeIcon.svg";
+import prevIcon from "../../assets/images/prevIcon.svg";
+import nextIcon from "../../assets/images/nextIcon.svg";
+import playIcon from "../../assets/images/playIcon.svg";
+import useSound from "use-sound";
 
 const Player = () => {
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          return 0;
-        }
-        const diff = Math.random() * 10;
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 500);
+  const duration = 200; // seconds
+  const [position, setPosition] = React.useState(32);
+  const [paused, setPaused] = React.useState(false);
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  const [play, data] = useSound(
+    "https://storage.googleapis.com/similar_sentences/Imagine%20Dragons%20-%20West%20Coast%20(Pendona.com).mp3"
+  );
+
+  function millisToMinutesAndSeconds(millis) {
+    var minutes = Math.floor(millis / 60000);
+    var seconds = ((millis % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  }
+  useEffect(() => {
+    console.log(millisToMinutesAndSeconds(data.duration));
+  }, [data]);
 
   return (
     <div className={classes.container}>
@@ -31,14 +38,57 @@ const Player = () => {
         </div>
         <div>
           <img className={classes.cover} src={dummy} alt="cover" />
-          <LinearProgress
+          <Slider
+            aria-label="time-indicator"
+            size="small"
+            value={position}
+            min={0}
+            step={1}
+            max={duration}
+            onChange={(_, value) => setPosition(value)}
             sx={{
-              backgroundColor: "#393734",
+              color: "#fff",
+              height: 4,
+              "& .MuiSlider-thumb": {
+                width: 8,
+                height: 8,
+                transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+                "&:before": {
+                  boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
+                },
+                "&:hover, &.Mui-focusVisible": {
+                  boxShadow: `0px 0px 0px 8px rgb(255 255 255 / 16%)'
+                }`,
+                },
+                "&.Mui-active": {
+                  width: 20,
+                  height: 20,
+                },
+              },
+              "& .MuiSlider-rail": {
+                opacity: 0.28,
+              },
             }}
-            color="inherit"
-            variant="determinate"
-            value={progress}
           />
+        </div>
+        <div className={classes.footer}>
+          <IconButton>
+            <img src={menuIcon} alt="menu" />
+          </IconButton>
+          <div className={classes.player_controls}>
+            <IconButton>
+              <img src={prevIcon} alt="Previous" />
+            </IconButton>
+            <IconButton>
+              <img src={playIcon} alt="Play" />
+            </IconButton>
+            <IconButton>
+              <img src={nextIcon} alt="Next" />
+            </IconButton>
+          </div>
+          <IconButton>
+            <img src={volumeIcon} alt="volume button" />
+          </IconButton>
         </div>
       </div>
     </div>

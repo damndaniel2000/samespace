@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import classes from "./Sidebar.module.css";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import { List, ListItemButton, Stack, Skeleton } from "@mui/material";
@@ -11,6 +11,9 @@ const Sidebar = () => {
       playlistId: 1,
     },
   });
+
+  const secondsToMinute = (s) =>
+    (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
 
   return (
     <div className={classes.container}>
@@ -52,7 +55,9 @@ const Sidebar = () => {
                   <div className={classes.artist}>{item.artist}</div>{" "}
                 </div>
               </div>
-              <div className={classes.duration}>{item.duration}</div>
+              <div className={classes.duration}>
+                {secondsToMinute(item.duration)}
+              </div>
             </ListItemButton>
           ))}
         </List>
