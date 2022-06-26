@@ -1,0 +1,32 @@
+.container {
+  width: 55%;
+  height: 100%;
+  background: black;
+  color: white;
+  position: relative;
+}
+.sub_container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.song {
+  font-weight: 700;
+  font-size: 32px;
+}
+.artist {
+  font-size: 16px;
+  opacity: 0.6;
+  margin-bottom: 2rem;
+}
+.cover {
+  width: 480px;
+  height: 480px;
+  margin-bottom: 1rem;
+}
+
+.container .MuiLinearProgress-bar {
+  background-color: red;
+}
