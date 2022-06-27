@@ -6,3 +6,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
 }
+
+#root {
+  background: linear-gradient(108.18deg, #243444 2.46%, #000000 99.84%);
+}

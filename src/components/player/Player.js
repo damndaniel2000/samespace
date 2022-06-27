@@ -8,6 +8,7 @@ import prevIcon from "../../assets/images/prevIcon.svg";
 import nextIcon from "../../assets/images/nextIcon.svg";
 import playIcon from "../../assets/images/playIcon.svg";
 import useSound from "use-sound";
+import { ColorExtractor } from "react-color-extractor";
 
 const Player = () => {
   const [progress, setProgress] = useState(0);
@@ -25,9 +26,12 @@ const Player = () => {
     var seconds = ((millis % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
-  useEffect(() => {
-    console.log(millisToMinutesAndSeconds(data.duration));
-  }, [data]);
+
+  const setGradient = (e) => {
+    document.getElementById(
+      "root"
+    ).style.background = `linear-gradient(108.18deg, ${e.pop()} 2.46%, #000000 99.84%)`;
+  };
 
   return (
     <div className={classes.container}>
@@ -37,7 +41,13 @@ const Player = () => {
           <div className={classes.artist}>Coldplay</div>
         </div>
         <div>
-          <img className={classes.cover} src={dummy} alt="cover" />
+          <ColorExtractor getColors={setGradient}>
+            <img
+              className={classes.cover}
+              src="https://i1.sndcdn.com/artworks-000084069767-om0uyb-t500x500.jpg"
+              alt="cover"
+            />
+          </ColorExtractor>
           <Slider
             aria-label="time-indicator"
             size="small"
