@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import classes from "./Sidebar.module.css";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import { List, ListItemButton, Stack, Skeleton } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { LOAD_SONGS } from "../../GraphQL/queries";
+import GlobalContext from "../../GlobalContext";
 
 const Sidebar = () => {
   const songs = useQuery(LOAD_SONGS, {
@@ -11,14 +12,19 @@ const Sidebar = () => {
       playlistId: 1,
     },
   });
+  const { songsList, currentPlaylist, setCurrentSong } =
+    useContext(GlobalContext);
 
   const secondsToMinute = (s) =>
     (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
+  const playSong = (item) => {
+    setCurrentSong(item);
+  };
 
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <div className={classes.title}>For You</div>
+        <div className={classes.title}>{currentPlaylist}</div>
         <div className={classes.searchbar_container}>
           <input
             placeholder="Search Songs, Artists"
@@ -29,7 +35,7 @@ const Sidebar = () => {
       </div>
 
       <div className={classes.songs}>
-        {songs.loading && (
+        {/* {songs.loading && (
           <Stack spacing="-10px">
             {[0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
               <Skeleton
@@ -40,10 +46,14 @@ const Sidebar = () => {
               />
             ))}
           </Stack>
-        )}
+        )} */}
         <List>
-          {songs?.data?.getSongs.map((item) => (
-            <ListItemButton className={classes.song} key={item._id}>
+          {songsList?.map((item) => (
+            <ListItemButton
+              onClick={() => playSong(item)}
+              className={classes.song}
+              key={item._id}
+            >
               <div className={classes.song_left_container}>
                 <img
                   className={classes.icon}
@@ -52,7 +62,7 @@ const Sidebar = () => {
                 />
                 <div>
                   <div className={classes.song_title}>{item.title}</div>
-                  <div className={classes.artist}>{item.artist}</div>{" "}
+                  <div className={classes.artist}>{item.artist}</div>
                 </div>
               </div>
               <div className={classes.duration}>

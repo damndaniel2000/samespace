@@ -18,12 +18,11 @@
 .artist {
   font-size: 16px;
   opacity: 0.6;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .cover {
   width: 480px;
   height: 480px;
-  margin-bottom: 1rem;
 }
 
 .container .MuiLinearProgress-bar {
@@ -33,7 +32,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
 }
 .player_controls {
   display: flex;

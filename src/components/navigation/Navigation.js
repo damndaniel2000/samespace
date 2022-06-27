@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import classes from "./Navigation.module.css";
 import logo from "../../assets/images/logo.svg";
 import { LOAD_PLAYLISTS, LOAD_SONGS } from "../../GraphQL/queries";
@@ -11,8 +11,11 @@ import {
   Skeleton,
 } from "@mui/material";
 import profileAvatar from "../../assets/images/profileAvatar.svg";
+import GlobalContext from "../../GlobalContext";
 
 const Navigation = () => {
+  const { setCurrentPlaylist, currentPlaylist, setSongsList } =
+    useContext(GlobalContext);
   const [playlistIndex, setPlaylistIndex] = useState(1);
 
   //playlists taken from API instead of hardcoding incase of more playlists being added
@@ -24,10 +27,18 @@ const Navigation = () => {
     },
   });
 
-  const handleClick = (index) => {
-    setPlaylistIndex(index);
-    getSongs().then((res) => console.log(res.data.getSongs));
-  };
+  const handleClick = useCallback(
+    (index, title) => {
+      setPlaylistIndex(index);
+      setCurrentPlaylist(title);
+      getSongs().then((res) => setSongsList(res.data.getSongs));
+    },
+    [getSongs, setCurrentPlaylist, setSongsList]
+  );
+
+  useEffect(() => {
+    handleClick(1, "For You");
+  }, [handleClick, setCurrentPlaylist]);
 
   return (
     <div className={classes.container}>
@@ -49,9 +60,9 @@ const Navigation = () => {
           <List component="nav">
             {playlists.data?.getPlaylists?.map((item) => (
               <ListItemButton
-                onClick={() => handleClick(item.id)}
+                onClick={() => handleClick(item.id, item.title)}
                 className={
-                  item.id === playlistIndex
+                  item.title === currentPlaylist
                     ? classes.selected
                     : classes.not_selected
                 }
