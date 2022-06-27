@@ -1,5 +1,5 @@
 {
-  "homepage": "http://damndaniel2000.github.io/samespace",
+  "homepage": "https://damndaniel2000.github.io/samespace",
   "name": "samespace",
   "version": "0.1.0",
   "private": true,
@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -b master -d build"
   },
   "eslintConfig": {
     "extends": [

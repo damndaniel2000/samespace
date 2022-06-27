@@ -3,6 +3,9 @@
   height: 100%;
   color: white;
   padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .navigation {
   margin-top: 1rem;

@@ -10,6 +10,7 @@ import {
   Stack,
   Skeleton,
 } from "@mui/material";
+import profileAvatar from "../../assets/images/profileAvatar.svg";
 
 const Navigation = () => {
   const [playlistIndex, setPlaylistIndex] = useState(1);
@@ -61,6 +62,9 @@ const Navigation = () => {
             ))}
           </List>
         </div>
+      </div>
+      <div style={{ marginBottom: "4rem" }}>
+        <img src={profileAvatar} alt="profile avatar" />
       </div>
     </div>
   );
