@@ -1,41 +1,52 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import classes from "./Sidebar.module.css";
 import searchIcon from "../../assets/images/searchIcon.svg";
 import { List, ListItemButton, Stack, Skeleton } from "@mui/material";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { LOAD_SONGS } from "../../GraphQL/queries";
 import GlobalContext from "../../GlobalContext";
 
 const Sidebar = () => {
-  const songs = useQuery(LOAD_SONGS, {
-    variables: {
-      playlistId: 1,
-    },
-  });
-  const { songsList, currentPlaylist, setCurrentSong } =
+  const [songsList, setSongsList] = useState();
+  const { currentPlaylist, setCurrentSong, currentSong } =
     useContext(GlobalContext);
+
+  const [getSongs, songs] = useLazyQuery(LOAD_SONGS);
 
   const secondsToMinute = (s) =>
     (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
   const playSong = (item) => {
     setCurrentSong(item);
   };
+  const searchSongs = (e) => {
+    getSongs({
+      variables: { playlistId: currentPlaylist.id, search: e.target.value },
+    }).then((res) => setSongsList(res.data.getSongs));
+  };
+
+  useEffect(() => {
+    if (currentPlaylist)
+      getSongs({ variables: { playlistId: currentPlaylist.id } }).then((res) =>
+        setSongsList(res.data.getSongs)
+      );
+  }, [currentPlaylist, getSongs]);
 
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <div className={classes.title}>{currentPlaylist}</div>
+        <div className={classes.title}>{currentPlaylist?.title}</div>
         <div className={classes.searchbar_container}>
           <input
             placeholder="Search Songs, Artists"
             className={classes.searchbar}
+            onChange={searchSongs}
           />
           <img src={searchIcon} alt="search icon" />
         </div>
       </div>
 
       <div className={classes.songs}>
-        {/* {songs.loading && (
+        {songs.loading && (
           <Stack spacing="-10px">
             {[0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
               <Skeleton
@@ -46,12 +57,16 @@ const Sidebar = () => {
               />
             ))}
           </Stack>
-        )} */}
+        )}
         <List>
           {songsList?.map((item) => (
             <ListItemButton
               onClick={() => playSong(item)}
-              className={classes.song}
+              className={
+                item.title === currentSong?.title
+                  ? `${classes.song} ${classes.active}`
+                  : classes.song
+              }
               key={item._id}
             >
               <div className={classes.song_left_container}>

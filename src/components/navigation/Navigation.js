@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import classes from "./Navigation.module.css";
 import logo from "../../assets/images/logo.svg";
-import { LOAD_PLAYLISTS, LOAD_SONGS } from "../../GraphQL/queries";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { LOAD_PLAYLISTS } from "../../GraphQL/queries";
+import { useQuery } from "@apollo/client";
 import {
   List,
   ListItemButton,
@@ -14,30 +14,23 @@ import profileAvatar from "../../assets/images/profileAvatar.svg";
 import GlobalContext from "../../GlobalContext";
 
 const Navigation = () => {
-  const { setCurrentPlaylist, currentPlaylist, setSongsList } =
-    useContext(GlobalContext);
-  const [playlistIndex, setPlaylistIndex] = useState(1);
+  const { setCurrentPlaylist, currentPlaylist } = useContext(GlobalContext);
 
   //playlists taken from API instead of hardcoding incase of more playlists being added
   const playlists = useQuery(LOAD_PLAYLISTS);
-  const [getSongs, songs] = useLazyQuery(LOAD_SONGS, {
-    variables: {
-      playlistId: playlistIndex,
-      search: null,
-    },
-  });
 
   const handleClick = useCallback(
-    (index, title) => {
-      setPlaylistIndex(index);
-      setCurrentPlaylist(title);
-      getSongs().then((res) => setSongsList(res.data.getSongs));
+    (item) => {
+      setCurrentPlaylist(item);
     },
-    [getSongs, setCurrentPlaylist, setSongsList]
+    [setCurrentPlaylist]
   );
 
   useEffect(() => {
-    handleClick(1, "For You");
+    handleClick({
+      id: 1,
+      title: "For You",
+    });
   }, [handleClick, setCurrentPlaylist]);
 
   return (
@@ -60,9 +53,9 @@ const Navigation = () => {
           <List component="nav">
             {playlists.data?.getPlaylists?.map((item) => (
               <ListItemButton
-                onClick={() => handleClick(item.id, item.title)}
+                onClick={() => handleClick(item)}
                 className={
-                  item.title === currentPlaylist
+                  item.title === currentPlaylist.title
                     ? classes.selected
                     : classes.not_selected
                 }
