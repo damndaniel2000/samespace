@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+  useCallback,
+} from "react";
 import classes from "./Player.module.css";
 import dummy from "../../assets/images/dummy.png";
 import { Slider, IconButton } from "@mui/material";
@@ -11,16 +17,38 @@ import useSound from "use-sound";
 import { ColorExtractor } from "react-color-extractor";
 import GlobalContext from "../../GlobalContext";
 
+const useAudio = (url) => {
+  console.log(url);
+  const [audio] = useState(new Audio(url));
+  const [playing, setPlaying] = useState(false);
+
+  const toggle = () => setPlaying(!playing);
+
+  useEffect(() => {
+    console.log(audio);
+    playing ? audio.play() : audio.pause();
+  }, [audio, playing]);
+
+  useEffect(() => {
+    audio.addEventListener("ended", () => setPlaying(false));
+    return () => {
+      audio.removeEventListener("ended", () => setPlaying(false));
+    };
+  }, [audio]);
+
+  return [playing, toggle];
+};
+
 const Player = () => {
   const { currentSong } = useContext(GlobalContext);
-  const [progress, setProgress] = useState(0);
 
   const duration = 200; // seconds
   const [position, setPosition] = React.useState(32);
   const [paused, setPaused] = React.useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [lastSong, setLastSong] = useState();
 
-  const [play, data] = useSound(currentSong?.url);
+  const audioRef = useRef(null);
 
   function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
@@ -33,16 +61,30 @@ const Player = () => {
       "root"
     ).style.background = `linear-gradient(108.18deg, ${e.pop()} 2.46%, #000000 99.84%)`;
   };
-
-  const handlePlay = () => {
-    if (isPlaying) data.pause();
-    else play();
+  const handlePlay = useCallback(() => {
+    if (lastSong !== currentSong?.title) {
+      audioRef.current.load();
+      audioRef.current.play();
+      setLastSong(currentSong?.title);
+      setIsPlaying(true);
+      return;
+    }
+    if (isPlaying) audioRef.current.pause();
+    else audioRef.current.play();
     setIsPlaying(!isPlaying);
-  };
+  }, [isPlaying, lastSong, currentSong]);
+
+  useEffect(() => {
+    if (currentSong) {
+      handlePlay();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSong]);
 
   return (
     <div className={classes.container}>
       <div className={classes.sub_container}>
+        <audio ref={audioRef} preload="auto" src={currentSong?.url} />
         <div className={classes.header}>
           <div className={classes.song}>{currentSong?.title}</div>
           <div className={classes.artist}>{currentSong?.artist}</div>
@@ -96,8 +138,8 @@ const Player = () => {
             <IconButton>
               <img src={prevIcon} alt="Previous" />
             </IconButton>
-            <IconButton>
-              <img src={playIcon} alt="Play" onClick={handlePlay} />
+            <IconButton onClick={handlePlay}>
+              <img src={playIcon} alt="Play" />
             </IconButton>
             <IconButton>
               <img src={nextIcon} alt="Next" />
