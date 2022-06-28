@@ -8,6 +8,7 @@ import GlobalContext from "../../GlobalContext";
 
 const Sidebar = () => {
   const [songsList, setSongsList] = useState();
+  const [currentSearch, setCurrentSearch] = useState("");
   const { currentPlaylist, setCurrentSong, currentSong } =
     useContext(GlobalContext);
 
@@ -19,16 +20,19 @@ const Sidebar = () => {
     setCurrentSong(item);
   };
   const searchSongs = (e) => {
+    setCurrentSearch(e.target.value);
     getSongs({
       variables: { playlistId: currentPlaylist.id, search: e.target.value },
     }).then((res) => setSongsList(res.data.getSongs));
   };
 
   useEffect(() => {
-    if (currentPlaylist)
-      getSongs({ variables: { playlistId: currentPlaylist.id } }).then((res) =>
-        setSongsList(res.data.getSongs)
-      );
+    if (currentPlaylist) {
+      getSongs({
+        variables: { playlistId: currentPlaylist.id, search: currentSearch },
+      }).then((res) => setSongsList(res.data.getSongs));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPlaylist, getSongs]);
 
   return (
@@ -59,32 +63,38 @@ const Sidebar = () => {
           </Stack>
         )}
         <List>
-          {songsList?.map((item) => (
-            <ListItemButton
-              onClick={() => playSong(item)}
-              className={
-                item.title === currentSong?.title
-                  ? `${classes.song} ${classes.active}`
-                  : classes.song
-              }
-              key={item._id}
-            >
-              <div className={classes.song_left_container}>
-                <img
-                  className={classes.icon}
-                  src={item.photo}
-                  alt="song avatar"
-                />
-                <div>
-                  <div className={classes.song_title}>{item.title}</div>
-                  <div className={classes.artist}>{item.artist}</div>
+          {songsList?.length ? (
+            songsList?.map((item) => (
+              <ListItemButton
+                onClick={() => playSong(item)}
+                className={
+                  item._id === currentSong?._id
+                    ? `${classes.song} ${classes.active}`
+                    : classes.song
+                }
+                key={item._id}
+              >
+                <div className={classes.song_left_container}>
+                  <img
+                    className={classes.icon}
+                    src={item.photo}
+                    alt="song avatar"
+                  />
+                  <div>
+                    <div className={classes.song_title}>{item.title}</div>
+                    <div className={classes.artist}>{item.artist}</div>
+                  </div>
                 </div>
-              </div>
-              <div className={classes.duration}>
-                {secondsToMinute(item.duration)}
-              </div>
+                <div className={classes.duration}>
+                  {secondsToMinute(item.duration)}
+                </div>
+              </ListItemButton>
+            ))
+          ) : (
+            <ListItemButton className={classes.song}>
+              No Results Found
             </ListItemButton>
-          ))}
+          )}
         </List>
       </div>
     </div>

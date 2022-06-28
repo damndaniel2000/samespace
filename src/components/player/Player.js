@@ -20,9 +20,7 @@ const Player = () => {
   const [paused, setPaused] = React.useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const [play, data] = useSound(
-    "https://storage.googleapis.com/similar_sentences/Imagine%20Dragons%20-%20West%20Coast%20(Pendona.com).mp3"
-  );
+  const [play, data] = useSound(currentSong?.url);
 
   function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
