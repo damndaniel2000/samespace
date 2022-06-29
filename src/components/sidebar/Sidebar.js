@@ -7,30 +7,37 @@ import { LOAD_SONGS } from "../../GraphQL/queries";
 import GlobalContext from "../../GlobalContext";
 
 const Sidebar = () => {
-  const [songsList, setSongsList] = useState();
   const [currentSearch, setCurrentSearch] = useState("");
-  const { currentPlaylist, setCurrentSong, currentSong } =
-    useContext(GlobalContext);
+  const {
+    currentPlaylist,
+    setCurrentSong,
+    currentSong,
+    setSongsList,
+    currentlyLoadedSongs,
+    setCurrentlyLoadedSongs,
+  } = useContext(GlobalContext);
 
   const [getSongs, songs] = useLazyQuery(LOAD_SONGS);
 
   const secondsToMinute = (s) =>
     (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
-  const playSong = (item) => {
-    setCurrentSong(item);
+
+  const playSong = (item, index) => {
+    setSongsList(currentlyLoadedSongs);
+    const data = { ...item };
+    data.songIndex = index;
+    setCurrentSong(data);
   };
-  const searchSongs = (e) => {
-    setCurrentSearch(e.target.value);
+
+  const getSongsList = (search) => {
     getSongs({
-      variables: { playlistId: currentPlaylist.id, search: e.target.value },
-    }).then((res) => setSongsList(res.data.getSongs));
+      variables: { playlistId: currentPlaylist.id, search: search },
+    }).then((res) => setCurrentlyLoadedSongs(res.data.getSongs));
   };
 
   useEffect(() => {
     if (currentPlaylist) {
-      getSongs({
-        variables: { playlistId: currentPlaylist.id, search: currentSearch },
-      }).then((res) => setSongsList(res.data.getSongs));
+      getSongsList(currentSearch);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPlaylist, getSongs]);
@@ -43,7 +50,10 @@ const Sidebar = () => {
           <input
             placeholder="Search Songs, Artists"
             className={classes.searchbar}
-            onChange={searchSongs}
+            onChange={(e) => {
+              setCurrentSearch(e.target.search);
+              getSongsList(e.target.value);
+            }}
           />
           <img src={searchIcon} alt="search icon" />
         </div>
@@ -63,10 +73,10 @@ const Sidebar = () => {
           </Stack>
         )}
         <List>
-          {songsList?.length ? (
-            songsList?.map((item) => (
+          {currentlyLoadedSongs?.length ? (
+            currentlyLoadedSongs?.map((item, index) => (
               <ListItemButton
-                onClick={() => playSong(item)}
+                onClick={() => playSong(item, index)}
                 className={
                   item._id === currentSong?._id
                     ? `${classes.song} ${classes.active}`

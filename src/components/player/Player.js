@@ -12,12 +12,13 @@ import volumeIcon from "../../assets/images/volumeIcon.svg";
 import prevIcon from "../../assets/images/prevIcon.svg";
 import nextIcon from "../../assets/images/nextIcon.svg";
 import playIcon from "../../assets/images/playIcon.svg";
+import pauseIcon from "../../assets/images/pauseIcon.svg";
 import headphonesIcon from "../../assets/images/headphones.png";
 import { ColorExtractor } from "react-color-extractor";
 import GlobalContext from "../../GlobalContext";
 
 const Player = () => {
-  const { currentSong } = useContext(GlobalContext);
+  const { currentSong, setCurrentSong, songsList } = useContext(GlobalContext);
 
   const [position, setPosition] = useState(32);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -50,6 +51,30 @@ const Player = () => {
     setIsPlaying(!isPlaying);
   }, [isPlaying, lastSong, currentSong]);
 
+  const nextSong = () => {
+    if (currentSong) {
+      const index =
+        currentSong.songIndex === songsList.length - 1
+          ? 0
+          : currentSong.songIndex + 1;
+      const data = { ...songsList[index] };
+      data.songIndex = index;
+      console.log(data, currentSong.index);
+      setCurrentSong(data);
+    }
+  };
+  const prevSong = () => {
+    if (currentSong) {
+      const index =
+        currentSong.songIndex === 0
+          ? songsList.length - 1
+          : currentSong.songIndex - 1;
+      const data = { ...songsList[index] };
+      data.songIndex = index;
+      setCurrentSong(data);
+    }
+  };
+
   useEffect(() => {
     if (currentSong) {
       handlePlay();
@@ -58,7 +83,6 @@ const Player = () => {
   }, [currentSong]);
 
   useEffect(() => {
-    console.log(isPlaying);
     if (audioRef.current && isPlaying) {
       const timer = setInterval(() => {
         setProgress(audioRef.current.currentTime);
@@ -128,13 +152,16 @@ const Player = () => {
                 <img src={menuIcon} alt="menu" />
               </IconButton>
               <div className={classes.player_controls}>
-                <IconButton>
+                <IconButton onClick={prevSong}>
                   <img src={prevIcon} alt="Previous" />
                 </IconButton>
                 <IconButton onClick={handlePlay}>
-                  <img src={playIcon} alt="Play" />
+                  <img
+                    src={isPlaying ? pauseIcon : playIcon}
+                    alt="Play/Pause"
+                  />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={nextSong}>
                   <img src={nextIcon} alt="Next" />
                 </IconButton>
               </div>
