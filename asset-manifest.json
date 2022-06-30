@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/samespace/static/css/main.ebf970b1.css",
-    "main.js": "/samespace/static/js/main.d118a58c.js",
+    "main.css": "/samespace/static/css/main.5f8aa2ce.css",
+    "main.js": "/samespace/static/js/main.d36ecb25.js",
     "static/media/profileAvatar.svg": "/samespace/static/media/profileAvatar.866891f7b702e568320136cb385c3386.svg",
     "static/media/BasierCircle-Medium.ttf": "/samespace/static/media/BasierCircle-Medium.f63bac6dc659234a71dd.ttf",
     "static/media/BasierCircle-Bold.ttf": "/samespace/static/media/BasierCircle-Bold.f0835b76763260c45740.ttf",
@@ -18,11 +18,12 @@
     "index.html": "/samespace/index.html",
     "static/media/pauseIcon.svg": "/samespace/static/media/pauseIcon.48d97549bb84dea07b18579fe7ecc7dd.svg",
     "static/media/searchIcon.svg": "/samespace/static/media/searchIcon.62a7f585c09a9786de3b840ba576d6d1.svg",
-    "main.ebf970b1.css.map": "/samespace/static/css/main.ebf970b1.css.map",
-    "main.d118a58c.js.map": "/samespace/static/js/main.d118a58c.js.map"
+    "static/media/drawerMenu.svg": "/samespace/static/media/drawerMenu.0de5cdd917f897cd032193860d269e78.svg",
+    "main.5f8aa2ce.css.map": "/samespace/static/css/main.5f8aa2ce.css.map",
+    "main.d36ecb25.js.map": "/samespace/static/js/main.d36ecb25.js.map"
   },
   "entrypoints": [
-    "static/css/main.ebf970b1.css",
-    "static/js/main.d118a58c.js"
+    "static/css/main.5f8aa2ce.css",
+    "static/js/main.d36ecb25.js"
   ]
 }
