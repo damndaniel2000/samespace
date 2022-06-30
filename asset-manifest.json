@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/samespace/static/css/main.0cb99192.css",
-    "main.js": "/samespace/static/js/main.62bb4d03.js",
+    "main.css": "/samespace/static/css/main.ebf970b1.css",
+    "main.js": "/samespace/static/js/main.d118a58c.js",
     "static/media/profileAvatar.svg": "/samespace/static/media/profileAvatar.866891f7b702e568320136cb385c3386.svg",
     "static/media/BasierCircle-Medium.ttf": "/samespace/static/media/BasierCircle-Medium.f63bac6dc659234a71dd.ttf",
     "static/media/BasierCircle-Bold.ttf": "/samespace/static/media/BasierCircle-Bold.f0835b76763260c45740.ttf",
@@ -9,18 +9,20 @@
     "static/media/headphones.png": "/samespace/static/media/headphones.68dc4504dac8fa12f1e8.png",
     "static/media/logo.svg": "/samespace/static/media/logo.40fb3cc0c0b1abf9105bab9db596c8c7.svg",
     "static/media/volumeIcon.svg": "/samespace/static/media/volumeIcon.2d8b65b4b2fab1bc06739f13f15c2681.svg",
+    "static/media/fullScreenIcon.svg": "/samespace/static/media/fullScreenIcon.a5645e38a0d4109417206cf1bed6825f.svg",
     "static/media/menuIcon.svg": "/samespace/static/media/menuIcon.14914959092f0eefec0a91422af149d8.svg",
     "static/media/nextIcon.svg": "/samespace/static/media/nextIcon.95964ad629f4a7b2a8574c902df26657.svg",
     "static/media/prevIcon.svg": "/samespace/static/media/prevIcon.b0a39474facdb5eaef3aadb16d04f051.svg",
     "static/media/playIcon.svg": "/samespace/static/media/playIcon.6320d9f76ac363608d93bcda9d9f174a.svg",
+    "static/media/closeIcon.svg": "/samespace/static/media/closeIcon.0761a3f3eecde15834764c34c409ea74.svg",
     "index.html": "/samespace/index.html",
     "static/media/pauseIcon.svg": "/samespace/static/media/pauseIcon.48d97549bb84dea07b18579fe7ecc7dd.svg",
     "static/media/searchIcon.svg": "/samespace/static/media/searchIcon.62a7f585c09a9786de3b840ba576d6d1.svg",
-    "main.0cb99192.css.map": "/samespace/static/css/main.0cb99192.css.map",
-    "main.62bb4d03.js.map": "/samespace/static/js/main.62bb4d03.js.map"
+    "main.ebf970b1.css.map": "/samespace/static/css/main.ebf970b1.css.map",
+    "main.d118a58c.js.map": "/samespace/static/js/main.d118a58c.js.map"
   },
   "entrypoints": [
-    "static/css/main.0cb99192.css",
-    "static/js/main.62bb4d03.js"
+    "static/css/main.ebf970b1.css",
+    "static/js/main.d118a58c.js"
   ]
 }
