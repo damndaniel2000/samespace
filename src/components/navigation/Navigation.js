@@ -67,7 +67,7 @@ const Navigation = () => {
           </List>
         </div>
       </div>
-      <div style={{ marginBottom: "4rem" }}>
+      <div className={classes.avatar}>
         <img src={profileAvatar} alt="profile avatar" />
       </div>
     </div>

@@ -4,6 +4,7 @@ import Player from "./components/player/Player";
 import Sidebar from "./components/sidebar/Sidebar";
 import { GlobalContextProvider } from "./GlobalContext";
 
+//ON END CODEEEEEEEE
 function App() {
   return (
     <GlobalContextProvider>
