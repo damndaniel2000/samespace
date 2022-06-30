@@ -6,7 +6,17 @@ import React, {
   useCallback,
 } from "react";
 import classes from "./Player.module.css";
-import { Slider, IconButton, useMediaQuery, Slide } from "@mui/material";
+import {
+  Slider,
+  IconButton,
+  useMediaQuery,
+  Slide,
+  Box,
+  Popper,
+  Tooltip,
+  Stack,
+  ClickAwayListener,
+} from "@mui/material";
 import menuIcon from "../../assets/images/menuIcon.svg";
 import volumeIcon from "../../assets/images/volumeIcon.svg";
 import prevIcon from "../../assets/images/prevIcon.svg";
@@ -21,6 +31,7 @@ import GlobalContext from "../../GlobalContext";
 
 const MainPlayer = (props) => {
   const { currentSong } = useContext(GlobalContext);
+  const [showVolume, setShowVolume] = useState(false);
 
   return (
     <>
@@ -102,9 +113,44 @@ const MainPlayer = (props) => {
                   <img src={nextIcon} alt="Next" />
                 </IconButton>
               </div>
-              <IconButton title="Control Volume">
-                <img src={volumeIcon} alt="volume button" />
-              </IconButton>
+              <ClickAwayListener onClickAway={() => setShowVolume(false)}>
+                <Tooltip
+                  PopperProps={{
+                    disablePortal: true,
+                  }}
+                  onClose={() => setShowVolume(false)}
+                  open={showVolume}
+                  disableFocusListener
+                  disableHoverListener
+                  disableTouchListener
+                  title={
+                    <div
+                      style={{
+                        width: 200,
+                        padding: "0 5px",
+                      }}
+                    >
+                      <Slider
+                        sx={{ color: "#fff" }}
+                        size="small"
+                        aria-label="Volume"
+                        value={props.volume}
+                        onChange={(e, val) => {
+                          props.setVolume(val);
+                          props.audioRef.current.volume = val;
+                        }}
+                        step={0.001}
+                        min={0}
+                        max={1}
+                      />
+                    </div>
+                  }
+                >
+                  <IconButton onClick={() => setShowVolume(true)}>
+                    <img src={volumeIcon} alt="volume button" />
+                  </IconButton>
+                </Tooltip>
+              </ClickAwayListener>
             </div>
           </>
         ) : (
@@ -129,15 +175,11 @@ const Player = () => {
   const [lastSong, setLastSong] = useState();
   const [progress, setProgress] = useState(0);
   const [fullScreen, setFullScreen] = useState(false);
+  const [volume, setVolume] = useState(1);
+
   const matches = useMediaQuery("(max-width:1100px)");
 
   const audioRef = useRef(null);
-
-  function millisToMinutesAndSeconds(millis) {
-    var minutes = Math.floor(millis / 60000);
-    var seconds = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-  }
 
   const setGradient = (e) => {
     const gradientColor = e.pop();
@@ -206,7 +248,7 @@ const Player = () => {
   return (
     <>
       <audio
-        onEnd={nextSong}
+        onEnded={nextSong}
         ref={audioRef}
         preload="auto"
         src={currentSong?.url}
@@ -220,6 +262,8 @@ const Player = () => {
             handlePlay={handlePlay}
             audioRef={audioRef}
             progress={progress}
+            volume={volume}
+            setVolume={setVolume}
             setGradient={setGradient}
           />
         )}
@@ -247,8 +291,14 @@ const Player = () => {
               </div>
             </div>
             <div className={classes.footer}>
-              <div className={classes.player_controls}>
-                <IconButton title="Previous Song" onClick={prevSong}>
+              <div className={classes.minimized_player_controls}>
+                <IconButton
+                  sx={{
+                    width: 20,
+                  }}
+                  title="Previous Song"
+                  onClick={prevSong}
+                >
                   <img src={prevIcon} alt="Previous" />
                 </IconButton>
                 <IconButton title="Pause/Play" onClick={handlePlay}>
@@ -287,6 +337,8 @@ const Player = () => {
             progress={progress}
             setGradient={setGradient}
             setFullScreen={setFullScreen}
+            volume={volume}
+            setVolume={setVolume}
             fullScreen={true}
           />
         </div>
