@@ -30,10 +30,6 @@
   width: 480px;
   height: 480px;
 }
-
-.container .MuiLinearProgress-bar {
-  background-color: red;
-}
 .footer {
   display: flex;
   justify-content: space-between;

@@ -5,6 +5,7 @@ import { List, ListItemButton, Stack, Skeleton } from "@mui/material";
 import { useLazyQuery } from "@apollo/client";
 import { LOAD_SONGS } from "../../GraphQL/queries";
 import GlobalContext from "../../GlobalContext";
+import drawerIcon from "../../assets/images/drawerMenu.svg";
 
 const Sidebar = () => {
   const [currentSearch, setCurrentSearch] = useState("");
@@ -15,6 +16,7 @@ const Sidebar = () => {
     setSongsList,
     currentlyLoadedSongs,
     setCurrentlyLoadedSongs,
+    setShowNavigationDrawer,
   } = useContext(GlobalContext);
 
   const [getSongs, songs] = useLazyQuery(LOAD_SONGS);
@@ -44,6 +46,12 @@ const Sidebar = () => {
 
   return (
     <div className={classes.container}>
+      <img
+        className={classes.drawer}
+        onClick={() => setShowNavigationDrawer(true)}
+        src={drawerIcon}
+        alt="Drawer Icon"
+      />
       <div className={classes.header}>
         <div className={classes.title}>{currentPlaylist?.title}</div>
         <div className={classes.searchbar_container}>

@@ -7,6 +7,7 @@ export const GlobalContextProvider = ({ children }) => {
   const [currentPlaylist, setCurrentPlaylist] = useState();
   const [songsList, setSongsList] = useState();
   const [currentlyLoadedSongs, setCurrentlyLoadedSongs] = useState();
+  const [showNavigationDrawer, setShowNavigationDrawer] = useState();
 
   return (
     <GlobalContext.Provider
@@ -19,6 +20,8 @@ export const GlobalContextProvider = ({ children }) => {
         setSongsList,
         currentlyLoadedSongs,
         setCurrentlyLoadedSongs,
+        showNavigationDrawer,
+        setShowNavigationDrawer,
       }}
     >
       {children}

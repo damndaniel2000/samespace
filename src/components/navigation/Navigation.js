@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect, useCallback, useState } from "react";
 import classes from "./Navigation.module.css";
 import logo from "../../assets/images/logo.svg";
 import { LOAD_PLAYLISTS } from "../../GraphQL/queries";
@@ -9,12 +9,19 @@ import {
   ListItemText,
   Stack,
   Skeleton,
+  useMediaQuery,
+  Drawer,
 } from "@mui/material";
 import profileAvatar from "../../assets/images/profileAvatar.svg";
 import GlobalContext from "../../GlobalContext";
 
-const Navigation = () => {
-  const { setCurrentPlaylist, currentPlaylist } = useContext(GlobalContext);
+const NavigationContent = () => {
+  const {
+    setCurrentPlaylist,
+    currentPlaylist,
+    showNavigationDrawer,
+    setShowNavigationDrawer,
+  } = useContext(GlobalContext);
 
   //playlists taken from API instead of hardcoding incase of more playlists being added
   const playlists = useQuery(LOAD_PLAYLISTS);
@@ -32,6 +39,10 @@ const Navigation = () => {
       title: "For You",
     });
   }, [handleClick, setCurrentPlaylist]);
+
+  useEffect(() => {
+    console.log(showNavigationDrawer);
+  }, [showNavigationDrawer]);
 
   return (
     <div className={classes.container}>
@@ -53,7 +64,10 @@ const Navigation = () => {
           <List component="nav">
             {playlists.data?.getPlaylists?.map((item) => (
               <ListItemButton
-                onClick={() => handleClick(item)}
+                onClick={() => {
+                  handleClick(item);
+                  setShowNavigationDrawer(false);
+                }}
                 className={
                   item.title === currentPlaylist.title
                     ? classes.selected
@@ -74,4 +88,29 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+const NavigationDrawer = () => {
+  const matches = useMediaQuery("(max-width:560px)");
+  const { showNavigationDrawer, setShowNavigationDrawer } =
+    useContext(GlobalContext);
+
+  return (
+    <>
+      {matches ? (
+        <Drawer
+          anchor="left"
+          open={showNavigationDrawer}
+          onClose={() => setShowNavigationDrawer(false)}
+          ModalProps={{
+            keepMounted: true,
+          }}
+        >
+          <NavigationContent />
+        </Drawer>
+      ) : (
+        <NavigationContent />
+      )}
+    </>
+  );
+};
+
+export default NavigationDrawer;
