@@ -4,8 +4,7 @@ import Player from "./components/player/Player";
 import Sidebar from "./components/sidebar/Sidebar";
 import { GlobalContextProvider } from "./GlobalContext";
 
-//ON END CODEEEEEEEE
-function App() {
+const App = () => {
   return (
     <GlobalContextProvider>
       <div className="App">
@@ -15,6 +14,6 @@ function App() {
       </div>
     </GlobalContextProvider>
   );
-}
+};
 
 export default App;

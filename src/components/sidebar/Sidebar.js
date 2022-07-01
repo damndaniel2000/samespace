@@ -21,6 +21,7 @@ const Sidebar = () => {
 
   const [getSongs, songs] = useLazyQuery(LOAD_SONGS);
 
+  //for displaying duration
   const secondsToMinute = (s) =>
     (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
 
@@ -81,7 +82,7 @@ const Sidebar = () => {
           </Stack>
         )}
         <List>
-          {currentlyLoadedSongs?.length ? (
+          {currentlyLoadedSongs?.length && !songs.loading ? (
             currentlyLoadedSongs?.map((item, index) => (
               <ListItemButton
                 onClick={() => playSong(item, index)}

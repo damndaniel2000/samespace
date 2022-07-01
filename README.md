@@ -15,3 +15,5 @@
 - I have used the ContextAPI to pass states throughout the application.
 - Material UI has been used for certain animations and click effects.
 - GraphQL's apollo client has been used to integrate GraphQl queries. Kindly overlook general coding practices in the GraphQL bits as I have not worked with it before and this happens to be my first time.
+- The fonts have been downloaded from an online source and used directly in the .css files after importing.
+- Additional icons required have been taken from different sources.

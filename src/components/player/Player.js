@@ -6,167 +6,14 @@ import React, {
   useCallback,
 } from "react";
 import classes from "./Player.module.css";
-import {
-  Slider,
-  IconButton,
-  useMediaQuery,
-  Slide,
-  Box,
-  Popper,
-  Tooltip,
-  Stack,
-  ClickAwayListener,
-} from "@mui/material";
-import menuIcon from "../../assets/images/menuIcon.svg";
-import volumeIcon from "../../assets/images/volumeIcon.svg";
+import { IconButton, useMediaQuery, Slide } from "@mui/material";
 import prevIcon from "../../assets/images/prevIcon.svg";
 import nextIcon from "../../assets/images/nextIcon.svg";
 import playIcon from "../../assets/images/playIcon.svg";
 import pauseIcon from "../../assets/images/pauseIcon.svg";
-import headphonesIcon from "../../assets/images/headphones.png";
 import fullScreenIcon from "../../assets/images/fullScreenIcon.svg";
-import closeIcon from "../../assets/images/closeIcon.svg";
-import { ColorExtractor } from "react-color-extractor";
 import GlobalContext from "../../GlobalContext";
-
-const MainPlayer = (props) => {
-  const { currentSong } = useContext(GlobalContext);
-  const [showVolume, setShowVolume] = useState(false);
-
-  return (
-    <>
-      {props.fullScreen && (
-        <div className={classes.close}>
-          <IconButton
-            onClick={() => props.setFullScreen(false)}
-            title="Exit Full Screen"
-          >
-            <img style={{ width: 20 }} src={closeIcon} alt="Close Icon" />
-          </IconButton>
-        </div>
-      )}
-      <div className={classes.sub_container}>
-        {currentSong ? (
-          <>
-            <div className={classes.header}>
-              <div className={classes.song}>{currentSong?.title}</div>
-              <div className={classes.artist}>{currentSong?.artist}</div>
-            </div>
-            <div>
-              <ColorExtractor getColors={props.setGradient}>
-                <img
-                  className={classes.cover}
-                  src={currentSong?.photo}
-                  alt="cover"
-                />
-              </ColorExtractor>
-              <Slider
-                aria-label="time-indicator"
-                size="small"
-                value={props.progress || null}
-                min={0}
-                step={1}
-                max={props.audioRef.current?.duration || null}
-                onChange={(_, value) => {
-                  props.audioRef.current.currentTime = value;
-                }}
-                sx={{
-                  color: "#fff",
-                  height: 4,
-                  "& .MuiSlider-thumb": {
-                    width: 8,
-                    height: 8,
-                    transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
-                    "&:before": {
-                      boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
-                    },
-                    "&:hover, &.Mui-focusVisible": {
-                      boxShadow: `0px 0px 0px 8px rgb(255 255 255 / 16%)'
-        }`,
-                    },
-                    "&.Mui-active": {
-                      width: 20,
-                      height: 20,
-                    },
-                  },
-                  "& .MuiSlider-rail": {
-                    opacity: 0.28,
-                  },
-                }}
-              />
-            </div>
-            <div className={classes.footer}>
-              <IconButton title="More Options">
-                <img src={menuIcon} alt="menu" />
-              </IconButton>
-              <div className={classes.player_controls}>
-                <IconButton title="Previous Song" onClick={props.prevSong}>
-                  <img src={prevIcon} alt="Previous" />
-                </IconButton>
-                <IconButton title="Pause/Play" onClick={props.handlePlay}>
-                  <img
-                    src={props.isPlaying ? pauseIcon : playIcon}
-                    alt="Play/Pause"
-                  />
-                </IconButton>
-                <IconButton title="Next Song" onClick={props.nextSong}>
-                  <img src={nextIcon} alt="Next" />
-                </IconButton>
-              </div>
-              <ClickAwayListener onClickAway={() => setShowVolume(false)}>
-                <Tooltip
-                  PopperProps={{
-                    disablePortal: true,
-                  }}
-                  onClose={() => setShowVolume(false)}
-                  open={showVolume}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  title={
-                    <div
-                      style={{
-                        width: 200,
-                        padding: "0 5px",
-                      }}
-                    >
-                      <Slider
-                        sx={{ color: "#fff" }}
-                        size="small"
-                        aria-label="Volume"
-                        value={props.volume}
-                        onChange={(e, val) => {
-                          props.setVolume(val);
-                          props.audioRef.current.volume = val;
-                        }}
-                        step={0.001}
-                        min={0}
-                        max={1}
-                      />
-                    </div>
-                  }
-                >
-                  <IconButton onClick={() => setShowVolume(true)}>
-                    <img src={volumeIcon} alt="volume button" />
-                  </IconButton>
-                </Tooltip>
-              </ClickAwayListener>
-            </div>
-          </>
-        ) : (
-          <div style={{ textAlign: "center" }}>
-            <img
-              style={{ width: 100, height: 100 }}
-              src={headphonesIcon}
-              alt="headphones"
-            />
-            <h3>Select a song to start playing music...</h3>
-          </div>
-        )}
-      </div>
-    </>
-  );
-};
+import PlayerContent from "./PlayerContent";
 
 const Player = () => {
   const { currentSong, setCurrentSong, songsList } = useContext(GlobalContext);
@@ -191,6 +38,7 @@ const Player = () => {
     ).style.background = `linear-gradient(320deg, ${gradientColor} 9%, rgba(0,0,0,1) 73%)`;
   };
   const handlePlay = useCallback(() => {
+    //stop and play the next song with new url
     if (lastSong !== currentSong?.title) {
       audioRef.current.load();
       audioRef.current.play();
@@ -233,6 +81,7 @@ const Player = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSong]);
 
+  //progress tracker for the progress bar
   useEffect(() => {
     if (audioRef.current && isPlaying) {
       const timer = setInterval(() => {
@@ -255,7 +104,7 @@ const Player = () => {
       />
       <div className={classes.container}>
         {!matches && (
-          <MainPlayer
+          <PlayerContent
             nextSong={nextSong}
             prevSong={prevSong}
             isPlaying={isPlaying}
@@ -333,7 +182,7 @@ const Player = () => {
         unmountOnExit
       >
         <div id="fullscreen" className={classes.fullscreen_container}>
-          <MainPlayer
+          <PlayerContent
             nextSong={nextSong}
             prevSong={prevSong}
             isPlaying={isPlaying}
