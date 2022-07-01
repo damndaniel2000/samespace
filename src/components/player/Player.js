@@ -28,15 +28,6 @@ const Player = () => {
 
   const audioRef = useRef(null);
 
-  const setGradient = (e) => {
-    const gradientColor = e.pop();
-    document.getElementById(
-      "root"
-    ).style.background = `linear-gradient(108.18deg, ${gradientColor} 2.46%, #000000 99.84%)`;
-    document.getElementById(
-      "fullscreen"
-    ).style.background = `linear-gradient(320deg, ${gradientColor} 9%, rgba(0,0,0,1) 73%)`;
-  };
   const handlePlay = useCallback(() => {
     //stop and play the next song with new url
     if (lastSong !== currentSong?.title) {
@@ -113,7 +104,6 @@ const Player = () => {
             progress={progress}
             volume={volume}
             setVolume={setVolume}
-            setGradient={setGradient}
           />
         )}
       </div>
@@ -173,12 +163,7 @@ const Player = () => {
         </div>
       </Slide>
 
-      <Slide
-        direction="up"
-        in={matches && fullScreen}
-        mountOnEnter
-        unmountOnExit
-      >
+      <Slide direction="up" in={matches && fullScreen}>
         <div id="fullscreen" className={classes.fullscreen_container}>
           <PlayerContent
             nextSong={nextSong}
@@ -187,7 +172,6 @@ const Player = () => {
             handlePlay={handlePlay}
             audioRef={audioRef}
             progress={progress}
-            setGradient={setGradient}
             setFullScreen={setFullScreen}
             volume={volume}
             setVolume={setVolume}

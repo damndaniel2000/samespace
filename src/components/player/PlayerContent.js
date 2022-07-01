@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import classes from "./Player.module.css";
 import { Slider, IconButton, Tooltip, ClickAwayListener } from "@mui/material";
 import menuIcon from "../../assets/images/menuIcon.svg";
@@ -9,12 +9,29 @@ import playIcon from "../../assets/images/playIcon.svg";
 import pauseIcon from "../../assets/images/pauseIcon.svg";
 import headphonesIcon from "../../assets/images/headphones.png";
 import closeIcon from "../../assets/images/closeIcon.svg";
-import { ColorExtractor } from "react-color-extractor";
 import GlobalContext from "../../GlobalContext";
 
 const PlayerContent = (props) => {
   const { currentSong } = useContext(GlobalContext);
   const [showVolume, setShowVolume] = useState(false);
+
+  const listener = useCallback(
+    (e) => {
+      const key = e.key?.toLowerCase();
+      if (key === "escape") {
+        props.setFullScreen(false);
+        return;
+      }
+    },
+    [props]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keyup", listener, false);
+    return () => {
+      document.removeEventListener("keyup", listener, false);
+    };
+  }, [listener]);
 
   return (
     <>
@@ -36,14 +53,11 @@ const PlayerContent = (props) => {
               <div className={classes.artist}>{currentSong?.artist}</div>
             </div>
             <div>
-              {/* component to get colors from an image */}
-              <ColorExtractor getColors={props.setGradient}>
-                <img
-                  className={classes.cover}
-                  src={currentSong?.photo}
-                  alt="cover"
-                />
-              </ColorExtractor>
+              <img
+                className={classes.cover}
+                src={currentSong?.photo}
+                alt="cover"
+              />
               <Slider
                 aria-label="time-indicator"
                 size="small"

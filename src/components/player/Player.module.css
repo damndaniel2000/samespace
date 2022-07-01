@@ -46,14 +46,12 @@
   .container {
     display: none;
   }
-  #fullscreen {
-    background: linear-gradient(108.18deg, #243444 2.46%, #000000 99.84%);
-  }
   .fullscreen_container {
     position: absolute;
     width: 100%;
     height: 100%;
     color: white;
+    background: linear-gradient(108.18deg, #243444 2.46%, #000000 99.84%);
   }
   .minimized_player_container {
     width: 100%;

@@ -6,6 +6,7 @@ import { useLazyQuery } from "@apollo/client";
 import { LOAD_SONGS } from "../../GraphQL/queries";
 import GlobalContext from "../../GlobalContext";
 import drawerIcon from "../../assets/images/drawerMenu.svg";
+import { ColorExtractor } from "react-color-extractor";
 
 const Sidebar = () => {
   const [currentSearch, setCurrentSearch] = useState("");
@@ -17,6 +18,7 @@ const Sidebar = () => {
     currentlyLoadedSongs,
     setCurrentlyLoadedSongs,
     setShowNavigationDrawer,
+    setGradient,
   } = useContext(GlobalContext);
 
   const [getSongs, songs] = useLazyQuery(LOAD_SONGS);
@@ -116,6 +118,7 @@ const Sidebar = () => {
           )}
         </List>
       </div>
+      <ColorExtractor src={currentSong?.photo} getColors={setGradient} />
     </div>
   );
 };
