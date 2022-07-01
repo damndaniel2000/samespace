@@ -63,13 +63,13 @@
     background-color: #181818;
     color: #fff;
   }
-  .minimized_player_controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 35%;
+  .minimized_player_controls img {
+    width: 40px;
+    height: 40px;
   }
-
+  .minimized_player_controls button {
+    width: 50px;
+  }
   .minimized_player {
     width: 90%;
     margin: 0 auto;
@@ -92,17 +92,18 @@
   }
 }
 @media screen and (max-width: 560px) {
+  .minimized_player_container {
+    height: 10%;
+  }
   .minimized_player_cover {
     width: 60px;
+    margin-right: 5px;
   }
   .minimized_player_song {
     font-size: 14px;
   }
   .minimized_player_artist {
     font-size: 10px;
-  }
-  .minimized_player_controls button {
-    width: 30px;
   }
   .song {
     font-size: 24px;
@@ -114,9 +115,36 @@
     width: 300px;
     height: 300px;
   }
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+  .minimized_player {
+    width: 98%;
+    margin-top: 5px;
+  }
+  .close {
+    width: 10px;
+    right: 30px;
+  }
+  .player_controls {
+    width: auto;
+  }
+  .footer img {
+    height: 35px;
+    width: 35px;
+  }
+  .footer button {
+    height: 20px;
+    width: 40px;
+  }
+  .minimized_player_controls {
+    width: 90%;
+    justify-content: flex-start;
+  }
+  .minimized_player_controls img {
+    height: 25px;
+    width: 25px;
+  }
+  .minimized_player_controls button {
+    height: 10px;
+    width: 30px;
   }
 }

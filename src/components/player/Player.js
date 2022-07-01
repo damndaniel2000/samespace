@@ -135,15 +135,17 @@ const Player = () => {
                 <div className={classes.minimized_player_song}>
                   {currentSong?.title}
                 </div>
-                <div className={classes.minimized_player_artist}> </div>
-                {currentSong?.artist}
+                <div className={classes.minimized_player_artist}>
+                  {currentSong?.artist}
+                </div>
               </div>
             </div>
             <div className={classes.footer}>
               <div className={classes.minimized_player_controls}>
                 <IconButton
                   sx={{
-                    width: 20,
+                    width: 10,
+                    height: 10,
                   }}
                   title="Previous Song"
                   onClick={prevSong}
@@ -163,11 +165,7 @@ const Player = () => {
                   onClick={() => setFullScreen(true)}
                   title="Full Screen"
                 >
-                  <img
-                    style={{ width: 30 }}
-                    src={fullScreenIcon}
-                    alt="Full Screen"
-                  />
+                  <img src={fullScreenIcon} alt="Full Screen" />
                 </IconButton>
               </div>
             </div>
