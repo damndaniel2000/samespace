@@ -326,7 +326,12 @@ const Player = () => {
         </div>
       </Slide>
 
-      <Slide direction="up" in={fullScreen} mountOnEnter unmountOnExit>
+      <Slide
+        direction="up"
+        in={matches && fullScreen}
+        mountOnEnter
+        unmountOnExit
+      >
         <div id="fullscreen" className={classes.fullscreen_container}>
           <MainPlayer
             nextSong={nextSong}
