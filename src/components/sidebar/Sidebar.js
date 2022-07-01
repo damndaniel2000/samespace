@@ -118,6 +118,7 @@ const Sidebar = () => {
           )}
         </List>
       </div>
+      {/* placed here to access it globally */}
       <ColorExtractor src={currentSong?.photo} getColors={setGradient} />
     </div>
   );
